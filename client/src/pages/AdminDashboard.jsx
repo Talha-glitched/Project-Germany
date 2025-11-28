@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FaTrash, FaEdit, FaSave, FaTimes, FaChartBar, FaEnvelope, FaPhone, FaClock, FaSignOutAlt, FaEye, FaStickyNote, FaUser, FaCalendarAlt } from 'react-icons/fa';
 import { useAuth } from '../context/AuthContext';
+import { API_ENDPOINTS } from '../config/api';
 
 const AdminDashboard = () => {
     const { token, logout } = useAuth();
@@ -26,7 +27,7 @@ const AdminDashboard = () => {
 
     const fetchEnquiries = async () => {
         try {
-            const response = await fetch('http://localhost:6001/api/enquiries', {
+            const response = await fetch(API_ENDPOINTS.ENQUIRIES.BASE, {
                 headers: getAuthHeaders(),
             });
             const data = await response.json();
@@ -40,7 +41,7 @@ const AdminDashboard = () => {
 
     const fetchStats = async () => {
         try {
-            const response = await fetch('http://localhost:6001/api/enquiries/stats', {
+            const response = await fetch(API_ENDPOINTS.ENQUIRIES.STATS, {
                 headers: getAuthHeaders(),
             });
             const data = await response.json();
@@ -54,7 +55,7 @@ const AdminDashboard = () => {
         if (!window.confirm('Are you sure you want to delete this enquiry?')) return;
 
         try {
-            await fetch(`http://localhost:6001/api/enquiries/${id}`, {
+            await fetch(API_ENDPOINTS.ENQUIRIES.BY_ID(id), {
                 method: 'DELETE',
                 headers: getAuthHeaders(),
             });
@@ -77,7 +78,7 @@ const AdminDashboard = () => {
 
     const handleSave = async () => {
         try {
-            await fetch(`http://localhost:6001/api/enquiries/${editingId}`, {
+            await fetch(API_ENDPOINTS.ENQUIRIES.BY_ID(editingId), {
                 method: 'PUT',
                 headers: getAuthHeaders(),
                 body: JSON.stringify(editForm),

@@ -2,3 +2,27 @@ AUTHENTICATION_GUIDE.md
 ADMIN_README.md
 ADMIN_SETUP.md
 QUICK_START.md
+
+# Environment variables
+.env
+.env.local
+.env.production
+.env.development
+client/.env
+client/.env.local
+client/.env.production
+client/.env.development
+server/.env
+server/.env.local
+
+# Dependencies
+node_modules/
+client/node_modules/
+server/node_modules/
+
+# Build outputs
+dist/
+build/
+client/dist/
+client/build/
+server/dist/

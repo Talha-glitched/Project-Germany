@@ -1,4 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
+import { API_ENDPOINTS } from '../config/api';
 
 const AuthContext = createContext();
 
@@ -27,7 +28,7 @@ export const AuthProvider = ({ children }) => {
             if (storedToken) {
                 console.log('🔵 [AuthContext] Token found in localStorage');
                 try {
-                    const url = 'http://localhost:6001/api/auth/verify';
+                    const url = API_ENDPOINTS.AUTH.VERIFY;
                     console.log('🔵 [AuthContext] Making request to:', url);
                     const response = await fetch(url, {
                         headers: {

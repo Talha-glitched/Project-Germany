@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import Button from './Button';
 import Input from './Input';
+import { API_ENDPOINTS } from '../config/api';
 
 const EnquiryForm = () => {
     const [formData, setFormData] = useState({
@@ -24,11 +25,11 @@ const EnquiryForm = () => {
         e.preventDefault();
         console.log('🔵 [EnquiryForm] Form submitted');
         console.log('🔵 [EnquiryForm] Form data:', formData);
-        
+
         setIsSubmitting(true);
         setStatus({ type: '', message: '' });
 
-        const url = 'http://localhost:6001/api/enquiries';
+        const url = API_ENDPOINTS.ENQUIRIES.BASE;
         console.log('🔵 [EnquiryForm] Making request to:', url);
         console.log('🔵 [EnquiryForm] Request method: POST');
         console.log('🔵 [EnquiryForm] Request body:', JSON.stringify(formData));

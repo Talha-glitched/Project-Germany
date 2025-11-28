@@ -4,6 +4,7 @@ import { FaUser, FaLock } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import logo from '../assets/Project_Germany.png';
+import { API_ENDPOINTS } from '../config/api';
 
 const Login = () => {
     const navigate = useNavigate();
@@ -27,11 +28,11 @@ const Login = () => {
         e.preventDefault();
         console.log('🔵 [Login] Form submitted');
         console.log('🔵 [Login] Form data:', formData);
-        
+
         setLoading(true);
         setError('');
 
-        const url = 'http://localhost:6001/api/auth/login';
+        const url = API_ENDPOINTS.AUTH.LOGIN;
         console.log('🔵 [Login] Making request to:', url);
         console.log('🔵 [Login] Request method: POST');
         console.log('🔵 [Login] Request body:', JSON.stringify(formData));
@@ -92,9 +93,9 @@ const Login = () => {
             >
                 <div className="text-center mb-8">
                     <div className="flex justify-center mb-4">
-                        <img 
-                            src={logo} 
-                            alt="Project Germany Logo" 
+                        <img
+                            src={logo}
+                            alt="Project Germany Logo"
                             className="h-24 md:h-28 w-auto"
                         />
                     </div>
