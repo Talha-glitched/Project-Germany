@@ -54,7 +54,7 @@ const Footer = () => {
                         </div>
                         <p className="text-sm text-gray-400">
                             Email: info@projectgermany.com<br />
-                            Phone: +49 123 456 789
+                            Phone: +49 152 164 634 27
                         </p>
                     </div>
                 </div>
