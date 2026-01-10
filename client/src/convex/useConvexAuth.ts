@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "convex/react";
-import { api } from "convex/_generated/api";
+import { api } from "./_generated/api.js";
 import { useState, useEffect } from "react";
 
 // Custom hook for authentication with Convex
