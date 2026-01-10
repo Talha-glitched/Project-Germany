@@ -10,8 +10,10 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      // Allow imports from root convex directory during build
-      'convex': path.resolve(__dirname, '../convex'),
+      // Only alias convex/_generated paths to root convex folder
+      // This allows imports like: import { api } from 'convex/_generated/api'
+      'convex/_generated/api': path.resolve(__dirname, '../convex/_generated/api'),
+      'convex/_generated/server': path.resolve(__dirname, '../convex/_generated/server'),
     },
   },
 })
