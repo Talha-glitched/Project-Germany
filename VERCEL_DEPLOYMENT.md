@@ -9,12 +9,15 @@
    - Click "Add New Project"
    - Import your GitHub repository
 
-2. **Configure Project:**
-   - **Framework Preset:** Vite
-   - **Root Directory:** `client`
-   - **Build Command:** `npm run build` (auto-detected)
+2. **Configure Project (CRITICAL - Must be set correctly):**
+   - **Framework Preset:** Vite (or leave blank/Other)
+   - **Root Directory:** `client` ⚠️ **MUST BE SET TO `client`**
+   - **Build Command:** `npm run build` (do NOT use `vite build` directly)
    - **Output Directory:** `dist` (auto-detected)
    - **Install Command:** `npm install` (auto-detected)
+   
+   ⚠️ **IMPORTANT:** If Root Directory is not set to `client`, the build will fail!
+   To fix: Go to Project Settings → General → Root Directory → Set to `client`
 
 3. **Environment Variables:**
    - Go to Project Settings → Environment Variables
@@ -105,10 +108,15 @@ Since your backend is on Render, make sure:
 - Check CORS settings on backend
 - Ensure backend is running (not spun down on free tier)
 
-### Build Failures?
-- Check Vercel build logs
-- Verify Root Directory is set to `client`
-- Ensure all dependencies are in `package.json`
+### Build Failures - "vite: command not found" Error?
+- **Root Directory MUST be set to `client`** in Vercel project settings
+  - Go to Project Settings → General → Root Directory → Set to `client`
+- **Build Command MUST be `npm run build`** (NOT `vite build`)
+  - Go to Project Settings → General → Build & Development Settings
+  - Ensure Build Command is set to `npm run build`
+- Verify `vite` is in `dependencies` (not just `devDependencies`)
+  - This has been fixed in the latest version of `client/package.json`
+- After fixing settings, trigger a new deployment
 
 ## 🎉 You're All Set!
 
