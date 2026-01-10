@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import { callHttpAction } from '../convex/httpActions';
+import { API_ENDPOINTS } from '../config/api';
 
 const AuthContext = createContext();
 
@@ -28,9 +28,9 @@ export const AuthProvider = ({ children }) => {
             if (storedToken) {
                 console.log('🔵 [AuthContext] Token found in localStorage');
                 try {
-                    console.log('🔵 [AuthContext] Verifying token via Convex HTTP action');
-                    const response = await callHttpAction('verify', {
-                        method: 'GET',
+                    const url = API_ENDPOINTS.AUTH.VERIFY;
+                    console.log('🔵 [AuthContext] Making request to:', url);
+                    const response = await fetch(url, {
                         headers: {
                             'Authorization': `Bearer ${storedToken}`,
                         },

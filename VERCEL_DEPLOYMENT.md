@@ -9,15 +9,12 @@
    - Click "Add New Project"
    - Import your GitHub repository
 
-2. **Configure Project (CRITICAL - Must be set correctly):**
-   - **Framework Preset:** Vite (or leave blank/Other)
-   - **Root Directory:** `client` ⚠️ **MUST BE SET TO `client`**
-   - **Build Command:** `npm run build` (do NOT use `vite build` directly)
+2. **Configure Project:**
+   - **Framework Preset:** Vite
+   - **Root Directory:** `client`
+   - **Build Command:** `npm run build` (auto-detected)
    - **Output Directory:** `dist` (auto-detected)
    - **Install Command:** `npm install` (auto-detected)
-   
-   ⚠️ **IMPORTANT:** If Root Directory is not set to `client`, the build will fail!
-   To fix: Go to Project Settings → General → Root Directory → Set to `client`
 
 3. **Environment Variables:**
    - Go to Project Settings → Environment Variables
@@ -108,39 +105,10 @@ Since your backend is on Render, make sure:
 - Check CORS settings on backend
 - Ensure backend is running (not spun down on free tier)
 
-### Build Failures - "vite: command not found" Error?
-- **Root Directory MUST be set to `client`** in Vercel project settings
-  - Go to Project Settings → General → Root Directory → Set to `client`
-- **Build Command MUST be `npm run build`** (NOT `vite build`)
-  - Go to Project Settings → General → Build & Development Settings
-  - Ensure Build Command is set to `npm run build`
-- Verify `vite` is in `dependencies` (not just `devDependencies`)
-  - This has been fixed in the latest version of `client/package.json`
-- After fixing settings, trigger a new deployment
-
-### Build Failures - "Could not resolve ../convex/_generated/api" Error?
-This error occurs when Convex generated files are not available during build. Solutions:
-
-1. **Generate Convex files locally before deploying:**
-   ```bash
-   # From root directory
-   npx convex codegen --output client/src/convex/_generated
-   ```
-   Then commit the generated files to git (the build script will handle this automatically).
-
-2. **Ensure Convex is configured for your project:**
-   - Make sure `npx convex dev` has been run at least once
-   - Verify `convex/_generated/` exists in the root directory
-   - The build script will automatically copy/generate files during build
-
-3. **If files are missing during build:**
-   - The build script will create minimal stub files to prevent build errors
-   - However, you'll need to properly configure Convex for the app to work at runtime
-   - Add `VITE_CONVEX_URL` environment variable in Vercel with your Convex deployment URL
-
-4. **Check Vercel Build Logs:**
-   - Look for "Convex files generated successfully" or "Creating stub files" messages
-   - If you see stub file warnings, ensure Convex is properly set up and run codegen locally
+### Build Failures?
+- Check Vercel build logs
+- Verify Root Directory is set to `client`
+- Ensure all dependencies are in `package.json`
 
 ## 🎉 You're All Set!
 

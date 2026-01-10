@@ -12,19 +12,17 @@ client/.env
 client/.env.local
 client/.env.production
 client/.env.development
+server/.env
+server/.env.local
 
 # Dependencies
 node_modules/
 client/node_modules/
+server/node_modules/
 
 # Build outputs
 dist/
 build/
 client/dist/
 client/build/
-
-# Convex
-.convex/
-convex/_generated/
-# Allow generated files in client directory for builds
-!client/src/convex/_generated/
+server/dist/

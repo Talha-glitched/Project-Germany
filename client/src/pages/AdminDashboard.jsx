@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FaTrash, FaEdit, FaSave, FaTimes, FaChartBar, FaEnvelope, FaPhone, FaClock, FaSignOutAlt, FaEye, FaStickyNote, FaUser, FaCalendarAlt } from 'react-icons/fa';
 import { useAuth } from '../context/AuthContext';
-import { callHttpAction } from '../convex/httpActions';
+import { API_ENDPOINTS } from '../config/api';
 
 const AdminDashboard = () => {
     const { token, logout } = useAuth();
@@ -22,12 +22,12 @@ const AdminDashboard = () => {
 
     const getAuthHeaders = () => ({
         'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
     });
 
     const fetchEnquiries = async () => {
         try {
-            const response = await callHttpAction('enquiries:list', {
-                method: 'GET',
+            const response = await fetch(API_ENDPOINTS.ENQUIRIES.BASE, {
                 headers: getAuthHeaders(),
             });
             const data = await response.json();
@@ -41,8 +41,7 @@ const AdminDashboard = () => {
 
     const fetchStats = async () => {
         try {
-            const response = await callHttpAction('enquiries:stats', {
-                method: 'GET',
+            const response = await fetch(API_ENDPOINTS.ENQUIRIES.STATS, {
                 headers: getAuthHeaders(),
             });
             const data = await response.json();
@@ -56,10 +55,9 @@ const AdminDashboard = () => {
         if (!window.confirm('Are you sure you want to delete this enquiry?')) return;
 
         try {
-            await callHttpAction('enquiries:remove', {
-                method: 'POST',
+            await fetch(API_ENDPOINTS.ENQUIRIES.BY_ID(id), {
+                method: 'DELETE',
                 headers: getAuthHeaders(),
-                body: { id },
             });
             fetchEnquiries();
             fetchStats();
@@ -80,13 +78,10 @@ const AdminDashboard = () => {
 
     const handleSave = async () => {
         try {
-            await callHttpAction('enquiries:update', {
-                method: 'POST',
+            await fetch(API_ENDPOINTS.ENQUIRIES.BY_ID(editingId), {
+                method: 'PUT',
                 headers: getAuthHeaders(),
-                body: {
-                    id: editingId,
-                    ...editForm,
-                },
+                body: JSON.stringify(editForm),
             });
             setEditingId(null);
             setEditForm({});
@@ -116,10 +111,8 @@ const AdminDashboard = () => {
         ? enquiries
         : enquiries.filter(e => e.status === filter);
 
-    const formatDate = (timestamp) => {
-        // Convex uses number timestamps (milliseconds)
-        const date = typeof timestamp === 'number' ? new Date(timestamp) : new Date(timestamp);
-        return date.toLocaleDateString('en-US', {
+    const formatDate = (dateString) => {
+        return new Date(dateString).toLocaleDateString('en-US', {
             year: 'numeric',
             month: 'short',
             day: 'numeric',
