@@ -87,7 +87,7 @@ const EnquiryForm = () => {
                                 </div>
                                 <div>
                                     <h4 className="text-lg font-semibold text-gray-900">Phone</h4>
-                                    <p className="text-gray-600">+49 123 456 789</p>
+                                    <p className="text-gray-600">+49 152 1646 3427</p>
                                 </div>
                             </div>
                             <div className="flex items-start space-x-4">
@@ -96,7 +96,7 @@ const EnquiryForm = () => {
                                 </div>
                                 <div>
                                     <h4 className="text-lg font-semibold text-gray-900">Email</h4>
-                                    <p className="text-gray-600">info@projectgermany.com</p>
+                                    <p className="text-gray-600">mhndxb3@gmail.com</p>
                                 </div>
                             </div>
                         </div>
