@@ -25,4 +25,4 @@ client/build/
 
 # Convex
 .convex/
-# convex/_generated/ - Commented out so files can be committed for Vercel build
+convex/_generated/

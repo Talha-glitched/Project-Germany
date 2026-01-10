@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import Button from './Button';
 import Input from './Input';
 import { useMutation } from 'convex/react';
-import { api } from '../convex/_generated/api.js';
+import { api } from '../convex/_generated/api';
 
 const EnquiryForm = () => {
     const createEnquiry = useMutation(api.enquiries.create);
