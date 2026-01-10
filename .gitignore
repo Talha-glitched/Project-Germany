@@ -26,3 +26,5 @@ client/build/
 # Convex
 .convex/
 convex/_generated/
+# Allow generated files in client directory for builds
+!client/src/convex/_generated/

@@ -118,6 +118,30 @@ Since your backend is on Render, make sure:
   - This has been fixed in the latest version of `client/package.json`
 - After fixing settings, trigger a new deployment
 
+### Build Failures - "Could not resolve ../convex/_generated/api" Error?
+This error occurs when Convex generated files are not available during build. Solutions:
+
+1. **Generate Convex files locally before deploying:**
+   ```bash
+   # From root directory
+   npx convex codegen --output client/src/convex/_generated
+   ```
+   Then commit the generated files to git (the build script will handle this automatically).
+
+2. **Ensure Convex is configured for your project:**
+   - Make sure `npx convex dev` has been run at least once
+   - Verify `convex/_generated/` exists in the root directory
+   - The build script will automatically copy/generate files during build
+
+3. **If files are missing during build:**
+   - The build script will create minimal stub files to prevent build errors
+   - However, you'll need to properly configure Convex for the app to work at runtime
+   - Add `VITE_CONVEX_URL` environment variable in Vercel with your Convex deployment URL
+
+4. **Check Vercel Build Logs:**
+   - Look for "Convex files generated successfully" or "Creating stub files" messages
+   - If you see stub file warnings, ensure Convex is properly set up and run codegen locally
+
 ## 🎉 You're All Set!
 
 Your frontend is now properly configured for Vercel with SPA routing support. The `/admin` route should work correctly now!

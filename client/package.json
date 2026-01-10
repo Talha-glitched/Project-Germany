@@ -5,9 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "prebuild": "node generate-convex-files.js",
     "build": "npx vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "convex:codegen": "node generate-convex-files.js"
   },
   "dependencies": {
     "convex": "^1.31.3",
