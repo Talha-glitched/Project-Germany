@@ -4,7 +4,7 @@ import { FaUser, FaLock } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import logo from '../assets/Project_Germany.png';
-import { API_ENDPOINTS } from '../config/api';
+import { callHttpAction } from '../convex/httpActions';
 
 const Login = () => {
     const navigate = useNavigate();
@@ -32,18 +32,13 @@ const Login = () => {
         setLoading(true);
         setError('');
 
-        const url = API_ENDPOINTS.AUTH.LOGIN;
-        console.log('🔵 [Login] Making request to:', url);
-        console.log('🔵 [Login] Request method: POST');
+        console.log('🔵 [Login] Making request via Convex HTTP action');
         console.log('🔵 [Login] Request body:', JSON.stringify(formData));
 
         try {
-            const response = await fetch(url, {
+            const response = await callHttpAction('login', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData),
+                body: formData,
             });
 
             console.log('🔵 [Login] Response received');
@@ -77,7 +72,7 @@ const Login = () => {
             console.error('🔴 [Login] Error name:', error.name);
             console.error('🔴 [Login] Error message:', error.message);
             console.error('🔴 [Login] Error stack:', error.stack);
-            setError(`Failed to connect to server: ${error.message}. Please check your internet connection and make sure the server is running on port 6001.`);
+            setError(`Failed to connect: ${error.message}. Please check your internet connection and ensure Convex is configured.`);
         } finally {
             setLoading(false);
             console.log('🔵 [Login] Form submission completed');

@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import Button from './Button';
 import Input from './Input';
-import { API_ENDPOINTS } from '../config/api';
+import { useMutation } from 'convex/react';
+import { api } from '../convex/_generated/api';
 
 const EnquiryForm = () => {
+    const createEnquiry = useMutation(api.enquiries.create);
+    
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -29,58 +32,30 @@ const EnquiryForm = () => {
         setIsSubmitting(true);
         setStatus({ type: '', message: '' });
 
-        const url = API_ENDPOINTS.ENQUIRIES.BASE;
-        console.log('🔵 [EnquiryForm] Making request to:', url);
-        console.log('🔵 [EnquiryForm] Request method: POST');
-        console.log('🔵 [EnquiryForm] Request body:', JSON.stringify(formData));
+        console.log('🔵 [EnquiryForm] Submitting enquiry via Convex');
+        console.log('🔵 [EnquiryForm] Form data:', formData);
 
         try {
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData),
+            const enquiry = await createEnquiry({
+                name: formData.name,
+                email: formData.email,
+                phone: formData.phone,
+                interest: formData.interest,
+                message: formData.message || undefined,
             });
 
-            console.log('🔵 [EnquiryForm] Response received');
-            console.log('🔵 [EnquiryForm] Response status:', response.status);
-            console.log('🔵 [EnquiryForm] Response ok:', response.ok);
-            console.log('🔵 [EnquiryForm] Response headers:', Object.fromEntries(response.headers.entries()));
-
-            let data;
-            try {
-                data = await response.json();
-                console.log('🔵 [EnquiryForm] Response data:', data);
-            } catch (jsonError) {
-                console.error('🔴 [EnquiryForm] Error parsing JSON:', jsonError);
-                const text = await response.text();
-                console.error('🔴 [EnquiryForm] Response text:', text);
-                setStatus({ type: 'error', message: 'Invalid response from server. Please try again.' });
-                setIsSubmitting(false);
-                return;
-            }
-
-            if (response.ok) {
-                console.log('✅ [EnquiryForm] Success! Enquiry submitted');
-                setStatus({ type: 'success', message: 'Thank you! Your enquiry has been submitted successfully.' });
-                setFormData({
-                    name: '',
-                    email: '',
-                    phone: '',
-                    interest: 'German Consultancy',
-                    message: '',
-                });
-            } else {
-                console.error('🔴 [EnquiryForm] Error response:', data);
-                setStatus({ type: 'error', message: data.message || 'Something went wrong. Please try again.' });
-            }
+            console.log('✅ [EnquiryForm] Success! Enquiry submitted:', enquiry);
+            setStatus({ type: 'success', message: 'Thank you! Your enquiry has been submitted successfully.' });
+            setFormData({
+                name: '',
+                email: '',
+                phone: '',
+                interest: 'German Consultancy',
+                message: '',
+            });
         } catch (error) {
-            console.error('🔴 [EnquiryForm] Fetch error:', error);
-            console.error('🔴 [EnquiryForm] Error name:', error.name);
-            console.error('🔴 [EnquiryForm] Error message:', error.message);
-            console.error('🔴 [EnquiryForm] Error stack:', error.stack);
-            setStatus({ type: 'error', message: `Failed to connect to the server: ${error.message}. Please check your internet connection and make sure the server is running on port 6001.` });
+            console.error('🔴 [EnquiryForm] Error:', error);
+            setStatus({ type: 'error', message: error.message || 'Something went wrong. Please try again.' });
         } finally {
             setIsSubmitting(false);
             console.log('🔵 [EnquiryForm] Form submission completed');
