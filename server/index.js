@@ -13,9 +13,16 @@ const PORT = process.env.PORT || 6001;
 
 // Middleware
 app.use(cors({
-  origin: "*",
+  origin: [
+    "https://project-germany.vercel.app",
+    "http://localhost:3000",
+    "http://localhost:5173"
+  ],
+  credentials: true,
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"]
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+  preflightContinue: false,
+  optionsSuccessStatus: 204
 }));
 app.use(express.json());
 
@@ -25,28 +32,28 @@ app.use('/api/auth', authRoutes);
 // Public route for submitting enquiries (contact form) - no auth required
 const Enquiry = require('./models/Enquiry');
 app.post('/api/enquiries', async (req, res) => {
-    try {
-        const { name, email, phone, interest, message } = req.body;
+  try {
+    const { name, email, phone, interest, message } = req.body;
 
-        // Basic validation
-        if (!name || !email || !phone) {
-            return res.status(400).json({ message: 'Please provide name, email, and phone.' });
-        }
-
-        const newEnquiry = new Enquiry({
-            name,
-            email,
-            phone,
-            interest,
-            message,
-        });
-
-        const savedEnquiry = await newEnquiry.save();
-        res.status(201).json(savedEnquiry);
-    } catch (error) {
-        console.error('Error saving enquiry:', error);
-        res.status(500).json({ message: 'Server error. Please try again later.' });
+    // Basic validation
+    if (!name || !email || !phone) {
+      return res.status(400).json({ message: 'Please provide name, email, and phone.' });
     }
+
+    const newEnquiry = new Enquiry({
+      name,
+      email,
+      phone,
+      interest,
+      message,
+    });
+
+    const savedEnquiry = await newEnquiry.save();
+    res.status(201).json(savedEnquiry);
+  } catch (error) {
+    console.error('Error saving enquiry:', error);
+    res.status(500).json({ message: 'Server error. Please try again later.' });
+  }
 });
 
 // Protected admin routes - require authentication
