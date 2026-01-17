@@ -11,20 +11,63 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 6001;
 
-// Middleware
-app.use(cors({
-  origin: [
-    "https://project-germany.vercel.app",
-    "http://localhost:3000",
-    "http://localhost:5173"
-  ],
+// CORS Configuration
+const allowedOrigins = [
+  "https://project-germany.vercel.app",
+  "http://localhost:3000",
+  "http://localhost:5173"
+];
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps, curl, or same-origin requests)
+    if (!origin) {
+      return callback(null, true);
+    }
+    // Check if origin is in allowed list
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      console.log('CORS blocked origin:', origin);
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Accept"],
+  exposedHeaders: ["Authorization"],
   preflightContinue: false,
   optionsSuccessStatus: 204
-}));
+};
+
+// Manual CORS headers middleware (fallback)
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (origin && allowedOrigins.includes(origin)) {
+    res.header('Access-Control-Allow-Origin', origin);
+    res.header('Access-Control-Allow-Credentials', 'true');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept');
+    res.header('Access-Control-Expose-Headers', 'Authorization');
+  }
+
+  // Handle preflight requests
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(204);
+  }
+  next();
+});
+
+// CORS middleware
+app.use(cors(corsOptions));
+
+// Handle preflight requests explicitly
+app.options('*', cors(corsOptions));
+
 app.use(express.json());
+
+// Explicitly handle OPTIONS requests for auth routes
+app.options('/api/auth/*', cors(corsOptions));
 
 // Routes
 app.use('/api/auth', authRoutes);
