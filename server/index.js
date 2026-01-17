@@ -40,34 +40,13 @@ const corsOptions = {
   optionsSuccessStatus: 204
 };
 
-// Manual CORS headers middleware (fallback)
-app.use((req, res, next) => {
-  const origin = req.headers.origin;
-  if (origin && allowedOrigins.includes(origin)) {
-    res.header('Access-Control-Allow-Origin', origin);
-    res.header('Access-Control-Allow-Credentials', 'true');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept');
-    res.header('Access-Control-Expose-Headers', 'Authorization');
-  }
-
-  // Handle preflight requests
-  if (req.method === 'OPTIONS') {
-    return res.sendStatus(204);
-  }
-  next();
-});
-
-// CORS middleware
+// CORS middleware - must be before routes
 app.use(cors(corsOptions));
 
-// Handle preflight requests explicitly
+// Handle preflight requests explicitly for all routes
 app.options('*', cors(corsOptions));
 
 app.use(express.json());
-
-// Explicitly handle OPTIONS requests for auth routes
-app.options('/api/auth/*', cors(corsOptions));
 
 // Routes
 app.use('/api/auth', authRoutes);
