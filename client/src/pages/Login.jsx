@@ -52,14 +52,21 @@ const Login = () => {
             console.log('🔵 [Login] Response headers:', Object.fromEntries(response.headers.entries()));
 
             let data;
-            try {
-                data = await response.json();
-                console.log('🔵 [Login] Response data:', data);
-            } catch (jsonError) {
-                console.error('🔴 [Login] Error parsing JSON:', jsonError);
+            const contentType = response.headers.get('content-type');
+            if (contentType && contentType.includes('application/json')) {
+                try {
+                    data = await response.json();
+                    console.log('🔵 [Login] Response data:', data);
+                } catch (jsonError) {
+                    console.error('🔴 [Login] Error parsing JSON:', jsonError);
+                    setError('Invalid response from server. Please try again.');
+                    setLoading(false);
+                    return;
+                }
+            } else {
                 const text = await response.text();
-                console.error('🔴 [Login] Response text:', text);
-                setError('Invalid response from server. Please try again.');
+                console.error('🔴 [Login] Non-JSON response:', text);
+                setError(`Server error (${response.status}): ${text || 'Unknown error'}`);
                 setLoading(false);
                 return;
             }
