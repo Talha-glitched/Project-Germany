@@ -11,40 +11,14 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 6001;
 
-// CORS Configuration
-const allowedOrigins = [
-  "https://project-germany.vercel.app",
-  "http://localhost:3000",
-  "http://localhost:5173"
-];
-
-const corsOptions = {
-  origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps, curl, or same-origin requests)
-    if (!origin) {
-      return callback(null, true);
-    }
-    // Check if origin is in allowed list
-    if (allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      console.log('CORS blocked origin:', origin);
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
+// CORS Configuration - Allow all origins
+app.use(cors({
+  origin: "*",
   credentials: true,
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Accept"],
-  exposedHeaders: ["Authorization"],
-  preflightContinue: false,
-  optionsSuccessStatus: 204
-};
-
-// CORS middleware - must be before routes
-app.use(cors(corsOptions));
-
-// Handle preflight requests explicitly for all routes
-app.options('*', cors(corsOptions));
+  exposedHeaders: ["Authorization"]
+}));
 
 app.use(express.json());
 
