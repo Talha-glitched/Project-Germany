@@ -52,10 +52,14 @@ const Footer = () => {
                             <a href="#" className="text-gray-400 hover:text-white transition-colors"><FaInstagram size={20} /></a>
                             <a href="#" className="text-gray-400 hover:text-white transition-colors"><FaLinkedin size={20} /></a>
                         </div>
-                        <p className="text-sm text-gray-400">
-                            Email: info@projectgermany.com<br />
-                            Phone: +49 123 456 789
-                        </p>
+                        <div className="text-sm text-gray-400 space-y-1">
+                            <p>
+                                Email: <a href="mailto:projectgermany@gmail.com" className="text-gray-400 hover:text-white transition-colors">projectgermany@gmail.com</a>
+                            </p>
+                            <p>
+                                Phone: <a href="tel:+4915216463427" className="text-gray-400 hover:text-white transition-colors">+49 1521 646 3427</a>
+                            </p>
+                        </div>
                     </div>
                 </div>
 

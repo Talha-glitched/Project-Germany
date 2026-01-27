@@ -112,9 +112,9 @@ const EnquiryForm = () => {
                                 </div>
                                 <div>
                                     <h4 className="text-lg font-semibold text-gray-900">Phone</h4>
-                                    <p className="text-gray-600">+49 15216463427</p>
-                                    <p className="text-gray-600">+971 586108361</p>
-                                    <p className="text-gray-600">+92 3328809001</p>
+                                    <p className="text-gray-600"> <a href="tel:+4915216463427" className=" hover:text-black transition-colors">+49 1521 646 3427</a></p>
+                                    <p className="text-gray-600"> <a href="tel:+971586108361" className=" hover:text-black transition-colors">+971 58 610 8361</a></p>
+                                    <p className="text-gray-600"> <a href="tel:+923328809001" className=" hover:text-black transition-colors">+92 332 8809001</a></p>
                                 </div>
                             </div>
                             <div className="flex items-start space-x-4">
