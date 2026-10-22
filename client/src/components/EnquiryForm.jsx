@@ -1,8 +1,25 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { FaWhatsapp } from 'react-icons/fa';
 import Button from './Button';
 import Input from './Input';
 import { API_ENDPOINTS } from '../config/api';
+
+const WHATSAPP_PHONE = '4915216463427'; // Project Germany WhatsApp Number (+49 1521 646 3427)
+
+const buildWhatsAppUrl = (data) => {
+    const text = [
+        `*New Enquiry - Project Germany*`,
+        ``,
+        `*Name:* ${data.name || ''}`,
+        `*Phone:* ${data.phone || ''}`,
+        `*Email:* ${data.email || ''}`,
+        `*Interested In:* ${data.interest || ''}`,
+        `*Message:* ${data.message?.trim() ? data.message : 'N/A'}`
+    ].join('\n');
+
+    return `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(text)}`;
+};
 
 const EnquiryForm = () => {
     const [formData, setFormData] = useState({
@@ -13,7 +30,7 @@ const EnquiryForm = () => {
         message: '',
     });
 
-    const [status, setStatus] = useState({ type: '', message: '' });
+    const [status, setStatus] = useState({ type: '', message: '', whatsappUrl: '' });
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleChange = (e) => {
@@ -23,17 +40,23 @@ const EnquiryForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('🔵 [EnquiryForm] Form submitted');
-        console.log('🔵 [EnquiryForm] Form data:', formData);
+        console.log('🔵 [EnquiryForm] Form submitted', formData);
+
+        // 1. Generate WhatsApp direct link with user input
+        const whatsappUrl = buildWhatsAppUrl(formData);
+
+        // 2. Open WhatsApp immediately to stay within the direct user gesture
+        window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
 
         setIsSubmitting(true);
-        setStatus({ type: '', message: '' });
+        setStatus({
+            type: 'info',
+            message: 'Opening WhatsApp chat and submitting enquiry...',
+            whatsappUrl,
+        });
 
+        // 3. Save enquiry to database for Admin Dashboard
         const url = API_ENDPOINTS.ENQUIRIES.BASE;
-        console.log('🔵 [EnquiryForm] Making request to:', url);
-        console.log('🔵 [EnquiryForm] Request method: POST');
-        console.log('🔵 [EnquiryForm] Request body:', JSON.stringify(formData));
-
         try {
             const response = await fetch(url, {
                 method: 'POST',
@@ -43,27 +66,12 @@ const EnquiryForm = () => {
                 body: JSON.stringify(formData),
             });
 
-            console.log('🔵 [EnquiryForm] Response received');
-            console.log('🔵 [EnquiryForm] Response status:', response.status);
-            console.log('🔵 [EnquiryForm] Response ok:', response.ok);
-            console.log('🔵 [EnquiryForm] Response headers:', Object.fromEntries(response.headers.entries()));
-
-            let data;
-            try {
-                data = await response.json();
-                console.log('🔵 [EnquiryForm] Response data:', data);
-            } catch (jsonError) {
-                console.error('🔴 [EnquiryForm] Error parsing JSON:', jsonError);
-                const text = await response.text();
-                console.error('🔴 [EnquiryForm] Response text:', text);
-                setStatus({ type: 'error', message: 'Invalid response from server. Please try again.' });
-                setIsSubmitting(false);
-                return;
-            }
-
             if (response.ok) {
-                console.log('✅ [EnquiryForm] Success! Enquiry submitted');
-                setStatus({ type: 'success', message: 'Thank you! Your enquiry has been submitted successfully.' });
+                setStatus({
+                    type: 'success',
+                    message: 'Thank you! Your enquiry has been submitted and WhatsApp has opened.',
+                    whatsappUrl,
+                });
                 setFormData({
                     name: '',
                     email: '',
@@ -72,18 +80,21 @@ const EnquiryForm = () => {
                     message: '',
                 });
             } else {
-                console.error('🔴 [EnquiryForm] Error response:', data);
-                setStatus({ type: 'error', message: data.message || 'Something went wrong. Please try again.' });
+                setStatus({
+                    type: 'success',
+                    message: 'WhatsApp chat opened with your enquiry details.',
+                    whatsappUrl,
+                });
             }
         } catch (error) {
-            console.error('🔴 [EnquiryForm] Fetch error:', error);
-            console.error('🔴 [EnquiryForm] Error name:', error.name);
-            console.error('🔴 [EnquiryForm] Error message:', error.message);
-            console.error('🔴 [EnquiryForm] Error stack:', error.stack);
-            setStatus({ type: 'error', message: `Failed to connect to the server: ${error.message}. Please check your internet connection and make sure the server is running on port 6001.` });
+            console.warn('Backend enquiry save warning:', error);
+            setStatus({
+                type: 'success',
+                message: 'WhatsApp chat opened with your enquiry details.',
+                whatsappUrl,
+            });
         } finally {
             setIsSubmitting(false);
-            console.log('🔵 [EnquiryForm] Form submission completed');
         }
     };
 
@@ -111,10 +122,22 @@ const EnquiryForm = () => {
                                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
                                 </div>
                                 <div>
-                                    <h4 className="text-lg font-semibold text-gray-900">Phone</h4>
-                                    <p className="text-gray-600"> <a href="tel:+4915216463427" className=" hover:text-black transition-colors">+49 1521 646 3427</a></p>
-                                    <p className="text-gray-600"> <a href="tel:+971586108361" className=" hover:text-black transition-colors">+971 58 610 8361</a></p>
-                                    <p className="text-gray-600"> <a href="tel:+923328809001" className=" hover:text-black transition-colors">+92 332 8809001</a></p>
+                                    <h4 className="text-lg font-semibold text-gray-900">Phone & WhatsApp</h4>
+                                    <p className="text-gray-600">
+                                        <a href="https://wa.me/4915216463427" target="_blank" rel="noopener noreferrer" className="hover:text-green-600 transition-colors inline-flex items-center gap-1.5">
+                                            <FaWhatsapp className="text-green-500 flex-shrink-0" /> +49 1521 646 3427
+                                        </a>
+                                    </p>
+                                    <p className="text-gray-600">
+                                        <a href="https://wa.me/971586108361" target="_blank" rel="noopener noreferrer" className="hover:text-green-600 transition-colors inline-flex items-center gap-1.5">
+                                            <FaWhatsapp className="text-green-500 flex-shrink-0" /> +971 58 610 8361
+                                        </a>
+                                    </p>
+                                    <p className="text-gray-600">
+                                        <a href="https://wa.me/923328809001" target="_blank" rel="noopener noreferrer" className="hover:text-green-600 transition-colors inline-flex items-center gap-1.5">
+                                            <FaWhatsapp className="text-green-500 flex-shrink-0" /> +92 332 8809001
+                                        </a>
+                                    </p>
                                 </div>
                             </div>
                             <div className="flex items-start space-x-4">
@@ -204,19 +227,40 @@ const EnquiryForm = () => {
                             />
 
                             {status.message && (
-                                <div className={`mb-4 p-3 rounded-lg text-sm ${status.type === 'success' ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
-                                    {status.message}
+                                <div className={`mb-5 p-4 rounded-xl text-sm ${
+                                    status.type === 'success' 
+                                        ? 'bg-emerald-50 text-emerald-900 border border-emerald-200' 
+                                        : status.type === 'error' 
+                                        ? 'bg-red-50 text-red-700 border border-red-200' 
+                                        : 'bg-blue-50 text-blue-900 border border-blue-200'
+                                }`}>
+                                    <p className="font-medium">{status.message}</p>
+                                    {status.whatsappUrl && (
+                                        <a
+                                            href={status.whatsappUrl}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="mt-2 inline-flex items-center gap-1.5 text-sm font-semibold text-emerald-700 hover:text-emerald-900 underline"
+                                        >
+                                            <FaWhatsapp className="text-base" />
+                                            Click here if WhatsApp didn't open automatically
+                                        </a>
+                                    )}
                                 </div>
                             )}
 
                             <Button
                                 type="submit"
-                                variant="primary"
-                                className="w-full"
+                                variant="whatsapp"
+                                className="w-full flex items-center justify-center gap-2.5 text-base md:text-lg font-semibold py-3.5 shadow-lg shadow-green-500/20"
                                 disabled={isSubmitting}
                             >
-                                {isSubmitting ? 'Sending...' : 'Send Enquiry'}
+                                <FaWhatsapp className="text-2xl" />
+                                <span>{isSubmitting ? 'Opening WhatsApp...' : 'Send Enquiry via WhatsApp'}</span>
                             </Button>
+                            <p className="text-xs text-gray-500 text-center mt-3">
+                                Opens WhatsApp directly with your details and saves your enquiry.
+                            </p>
                         </form>
                     </motion.div>
                 </div>

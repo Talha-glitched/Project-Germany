@@ -1,6 +1,7 @@
 import React from 'react';
 import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from 'react-icons/fa';
 import logo from '../assets/Project_Germany.png';
+import egsLogo from '../assets/EGS-Logo.png';
 
 const Footer = () => {
     return (
@@ -63,8 +64,25 @@ const Footer = () => {
                     </div>
                 </div>
 
-                <div className="mt-12 pt-8 border-t border-gray-800 text-center text-sm text-gray-500">
-                    &copy; {new Date().getFullYear()} Project Germany. All rights reserved.
+                <div className="mt-12 pt-8 border-t border-gray-800 flex flex-col sm:flex-row items-center justify-between text-sm text-gray-400 gap-4">
+                    <p>&copy; {new Date().getFullYear()} Project Germany. All rights reserved.</p>
+                    <div className="flex items-center gap-2 text-xs">
+                        <span>Developed by</span>
+                        <a 
+                            href="https://exhibitgraphicsign.com" 
+                            target="_blank" 
+                            rel="noopener noreferrer" 
+                            className="inline-flex items-center gap-1.5 text-gray-300 hover:text-white transition-colors"
+                            title="Exhibit Graphic Sign"
+                        >
+                            <img 
+                                src={egsLogo} 
+                                alt="Exhibit Graphic Sign Logo" 
+                                className="h-6 w-auto object-contain"
+                            />
+                            <span>exhibitgraphicsign.com</span>
+                        </a>
+                    </div>
                 </div>
             </div>
         </footer>

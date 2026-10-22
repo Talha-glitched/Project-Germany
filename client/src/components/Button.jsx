@@ -9,6 +9,7 @@ const Button = ({ children, onClick, variant = 'primary', className = '', type =
         secondary: "bg-secondary text-white hover:bg-amber-600 focus:ring-secondary",
         outline: "border-2 border-primary text-primary hover:bg-primary hover:text-white focus:ring-primary",
         white: "bg-white text-primary hover:bg-gray-100 focus:ring-white",
+        whatsapp: "bg-[#25D366] text-white hover:bg-[#20ba5c] focus:ring-[#25D366] shadow-lg shadow-green-600/20",
     };
 
     return (
