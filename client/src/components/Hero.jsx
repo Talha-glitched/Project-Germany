@@ -10,7 +10,9 @@ const Hero = () => {
             <div className="absolute inset-0 z-0">
                 <img
                     src="https://images.unsplash.com/photo-1467269204594-9661b134dd2b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
-                    alt="Germany Landscape"
+                    alt="Historic German architecture and university cities landscape"
+                    fetchPriority="high"
+                    decoding="async"
                     className="w-full h-full object-cover opacity-40"
                 />
                 <div className="absolute inset-0 bg-gradient-to-b from-primary/80 to-primary/90" />

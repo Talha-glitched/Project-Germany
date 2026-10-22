@@ -48,10 +48,10 @@ const Footer = () => {
                     <div>
                         <h3 className="text-lg font-semibold mb-4 text-secondary">Connect With Us</h3>
                         <div className="flex space-x-4 mb-4">
-                            <a href="#" className="text-gray-400 hover:text-white transition-colors"><FaFacebook size={20} /></a>
-                            <a href="#" className="text-gray-400 hover:text-white transition-colors"><FaTwitter size={20} /></a>
-                            <a href="#" className="text-gray-400 hover:text-white transition-colors"><FaInstagram size={20} /></a>
-                            <a href="#" className="text-gray-400 hover:text-white transition-colors"><FaLinkedin size={20} /></a>
+                            <a href="#" aria-label="Visit Project Germany on Facebook" className="text-gray-400 hover:text-white transition-colors"><FaFacebook size={20} /></a>
+                            <a href="#" aria-label="Visit Project Germany on Twitter" className="text-gray-400 hover:text-white transition-colors"><FaTwitter size={20} /></a>
+                            <a href="#" aria-label="Visit Project Germany on Instagram" className="text-gray-400 hover:text-white transition-colors"><FaInstagram size={20} /></a>
+                            <a href="#" aria-label="Visit Project Germany on LinkedIn" className="text-gray-400 hover:text-white transition-colors"><FaLinkedin size={20} /></a>
                         </div>
                         <div className="text-sm text-gray-400 space-y-1">
                             <p>

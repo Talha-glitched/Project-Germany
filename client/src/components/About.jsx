@@ -18,7 +18,9 @@ const About = () => {
                         <div className="absolute -bottom-4 -right-4 w-72 h-72 bg-primary/5 rounded-full blur-3xl" />
                         <img
                             src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?ixlib=rb-4.0.3&auto=format&fit=crop&w=1740&q=80"
-                            alt="Student studying"
+                            alt="International students collaborating on university applications for study in Germany"
+                            loading="lazy"
+                            decoding="async"
                             className="relative rounded-2xl shadow-2xl w-full object-cover h-[600px]"
                         />
                         <div className="absolute bottom-8 left-8 right-8 bg-white/90 backdrop-blur-md p-6 rounded-xl shadow-lg border border-gray-100">
